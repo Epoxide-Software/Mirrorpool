@@ -44,7 +44,7 @@ dependencies {
 ```
 
 ##Legal Information
-MirrorPool is licensed under the [LGPL2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html). Please see the `License.md` for more details. 
+MirrorPool is licensed under the [LGPL2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html). Please see the `LICENSE` for more details. 
 
 ##Credits
 * [Darkhax](https://github.com/darkhax) - Maintainer of MirrorPool.
