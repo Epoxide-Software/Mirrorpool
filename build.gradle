@@ -1,0 +1,80 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+archivesBaseName = "MirrorPool"
+group 'xyz.epoxide.mirrorpool'
+version = getVersionFromJava(file("src/main/java/xyz/epoxide/mirrorpool/MirrorPool.java"))
+
+String getVersionFromJava(File file) {
+    String release = "0";
+    String update = "0";
+    String patch = "0";
+
+    String build = System.getenv("BUILD_NUMBER") ?: "0";
+    def outfile = "";
+    def ln = System.getProperty("line.separator")
+
+    String prefix = "public static final String version = \"";
+    file.eachLine { String s ->
+
+        String v = s.trim();
+        if (v.startsWith(prefix)) {
+            v = v.substring(prefix.length(), v.length() - 2);
+            String[] pts = v.split("\\.");
+
+            release = pts[0];
+            update = pts[1];
+            patch = pts[2];
+            s = s.replaceAll(".0\";", ".${build}\";");
+        }
+        outfile += (s + ln);
+    }
+
+    file.write(outfile);
+
+    return "$release.$update.$patch.$build";
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task buildJar(type: Jar) {
+    from sourceSets.main.output
+}
+
+artifacts {
+    archives buildJar
+    archives sourcesJar
+    archives javadocJar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file:///var/www/html/maven")
+        }
+    }
+}
