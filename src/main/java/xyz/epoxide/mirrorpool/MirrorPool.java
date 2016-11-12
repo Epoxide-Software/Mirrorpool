@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * Sections of this class are inspired by the DynamicEnumTest posted by badtrash on
  * niceideas.ch http://niceideas.ch/roller2/badtrash/resource/DynamicEnumTest.java
  */
-public final class Mirrorpool {
+public final class MirrorPool {
     
     /**
      * The current version of the library. Follows a Major-Release-Build structure. The major
